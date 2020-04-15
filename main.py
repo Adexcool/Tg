@@ -14,7 +14,7 @@ THREADS_LIMIT = 1300
 
 chat_ids_file = 'chat_ids.txt'
 
-ADMIN_CHAT_ID = 491315631, 601011461
+ADMIN_CHAT_ID = 601011461
 
 group_id = -1001474307038
 
@@ -122,7 +122,7 @@ def start(message):
   save_chat_id(message.chat.id)
 
  if user_status == 'restricted' or user_status =='left' or user_status =='kicked':
-   bot.send_message(message.chat.id, 'Вы не подписаны на наш канал.\nПодпишитесь на него чтобы получить доступ к боту и нажмите /start .', reply_markup = inl_keyboard)
+   bot.send_message(message.chat.id, 'Вы не подписаны на наш канал.\nПодпишитесь на него чтобы получить доступ к боту.', reply_markup = inl_keyboard)
 
 
  
@@ -532,6 +532,6 @@ def handle_message_received(message):
     bot.send_message(chat_id, 'Номер введен неправильно.')
 
   if user_status == 'restricted' or user_status =='left' or user_status =='kicked':
-   bot.send_message(message.chat.id, 'Вы не подписаны на наш канал.\nПодпишитесь на него, чтобы получить доступ к боту и нажмите /start .', reply_markup = inl_keyboard)
+   bot.send_message(message.chat.id, 'Вы не подписаны на наш канал.\nПодпишитесь на него, чтобы получить доступ к боту и нажмите.', reply_markup = inl_keyboard)
                 
 bot.polling(none_stop=True)
