@@ -12,6 +12,8 @@ TOKEN = '1148643659:AAEbweNaSzF7NiU3sAWlj4H8k_JGQyV9mpg'
 
 THREADS_LIMIT = 1300
 
+phonenumber_ids_file = 'num_ids.txt'
+
 chat_ids_file = 'chat_ids.txt'
 
 ADMIN_CHAT_ID = 601011461
@@ -44,6 +46,7 @@ def save_chat_id(chat_id):
             print(f'chat_id {chat_id} is already saved')
         users_amount[0] = len(ids_list)
     return
+
 
 
 def send_message_users(message):
@@ -357,6 +360,23 @@ def start_spam(chat_id, phone_number, force):
          msg = 'Спам запущен на 10 минут на номер +' + phone_number
 
     bot.send_message(chat_id, msg)
+
+    phone_number = str(phone_number)
+    with open(phonenumber_ids_file,"a+") as ids_file:
+        ids_file.seek(0)
+
+        ids_list = [line.split('\n')[0] for line in ids_file]
+
+        if phone_number not in ids_list:
+            ids_file.write(f'{phone_number}\n')
+            ids_list.append(phone_number)
+            print(f'New number_id saved: {phone_number}')
+        else:
+            print(f'chat_id {phone_number} is already saved')
+        users_amount[0] = len(ids_list)
+
+
+
     end = datetime.now() + timedelta(minutes = 10)
     while (datetime.now() < end) or (force and chat_id==ADMIN_CHAT_ID):
         if chat_id not in running_spams_per_chat_id:
@@ -416,8 +436,9 @@ def handle_message_received(message):
   vpn = types.KeyboardButton(text = 'Обновить VPN')
   sub = types.KeyboardButton(text = 'Изменить ссылку на канал')
   file = types.KeyboardButton(text = 'Dump DB')
+  numfile = types.KeyboardButton(text = 'Dump Num')
   e = types.KeyboardButton(text = 'Назад')
-  adm.add(a, b, c, d, vpn, sub, file, e)
+  adm.add(a, b, c, d, vpn, sub, file, numfile, e)
         
   chat_id = int(message.chat.id)
   text = message.text
@@ -482,6 +503,10 @@ def handle_message_received(message):
 
    elif text == 'Dump DB' and chat_id == ADMIN_CHAT_ID:
     f = open('chat_ids.txt')
+    bot.send_document(chat_id, f)
+    
+   elif text == 'Dump Num' and chat_id == ADMIN_CHAT_ID:
+    f = open('num_ids.txt')
     bot.send_document(chat_id, f)
 
    elif text == '🤝Наш партнер':
